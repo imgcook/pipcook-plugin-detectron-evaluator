@@ -1,4 +1,4 @@
-# @pipcook/plugins-detectron-model-train
+# @pipcook/plugins-detectron-model-evaluate
 
 ### Description
 
