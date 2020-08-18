@@ -2,6 +2,7 @@ import { ModelEvaluateType, UniModel, CocoDataset, ArgsType, EvaluateResult } fr
 import * as path from 'path';
 
 const boa = require('@pipcook/boa');
+const { dict } = boa.builtins();
 
 const detectronModelEvaluate: ModelEvaluateType = async (data: CocoDataset, model: UniModel, args: ArgsType): Promise<EvaluateResult> => {
   let { modelDir } = args;
@@ -14,7 +15,7 @@ const detectronModelEvaluate: ModelEvaluateType = async (data: CocoDataset, mode
     const { COCOEvaluator, inference_on_dataset } = boa.import('detectron2.evaluation');
     const { build_detection_test_loader } = boa.import('detectron2.data');
 
-    register_coco_instances('test_dataset', {}, data.testAnnotationPath, path.join(data.testAnnotationPath, '..'));
+    register_coco_instances('test_dataset', dict(), data.testAnnotationPath, path.join(data.testAnnotationPath, '..'));
     cfg.DATASETS.TEST = [ 'test_dataset' ];
 
     const evaluator = COCOEvaluator('test_dataset', cfg, false, boa.kwargs({ output_dir: modelDir }));
