@@ -20,9 +20,18 @@ const detectronModelEvaluate: ModelEvaluateType = async (data: CocoDataset, mode
 
     const evaluator = COCOEvaluator('test_dataset', cfg, false, boa.kwargs({ output_dir: modelDir }));
     const val_loader = build_detection_test_loader(cfg, 'test_dataset');
+    const valRes = inference_on_dataset(trainer.model, val_loader, evaluator);
+    const valResDict = dict(valRes)['bbox'];
+    const finalRes: any = {};
+    const keys = ['AP', 'AP50', 'AP75', 'APs', 'APm', 'APl'];
+    for (let key of keys) {
+      if (valResDict.get(key)) {
+        finalRes[key] = valResDict.get(key)
+      }
+    }
     return {
-      pass: true,
-      result: inference_on_dataset(trainer.model, val_loader, evaluator).toString()
+        pass: true,
+        result: finalRes
     };
   }
 
